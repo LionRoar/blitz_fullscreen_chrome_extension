@@ -74,6 +74,15 @@
                 color: #DDD;
             }
             
+            li:focus { 
+                background: #666;
+            }
+            li:focus > .tab-title { 
+                color: rgb(131, 231, 38);
+            }
+            li:focus > .tab-url {
+                color: #DDD;
+            }
             .active {
                 background: #DDD;
             }
@@ -81,7 +90,10 @@
         <script src="redirector.js"></script>
     </head>
     <body>
-        <input type="text" id="launch_url" placeholder="http://" accesskey="s">
+
+        <div>
+        <input type="text" id="launch_url" placeholder="http://" tabindex="0" accesskey="s">
         <ul id="tablist"></ul>
+        </div>
     </body>
 </html>

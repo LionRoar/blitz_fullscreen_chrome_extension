@@ -50,7 +50,11 @@ function get_location() {
 // handles hitting 'enter' inside the input box
 function handle_keypress(e) {
     key = e.keyCode? e.keyCode : e.charCode;
-    if(key==13 && !e.shiftKey) {
+    //check if a tab is selected
+    if(key == 13 && document.activeElement.tagName == 'LI'){
+        document.activeElement.click();
+    }
+    else if(key==13 && !e.shiftKey) {
         chrome.windows.getCurrent(function(w) {
             chrome.tabs.getSelected(w.id, function (tab) {
                 chrome.tabs.update(tab.id, { "url": get_location() });
@@ -94,10 +98,14 @@ function do_list_tabs(w) {
         // remove old elements
         tablist.innerHTML = "";
         
-        tabs.forEach(function(tab) {
+        
+        tabs.forEach(function(tab,id) {
             var li = document.createElement('li');
             var title = document.createElement('span');
             var urlspan = document.createElement('span');
+
+            //adding a tab-index
+            li.setAttribute('tabindex', +id+1);
             
             title.appendChild(document.createTextNode(tab.title));
             title.setAttribute('class', 'tab-title');
