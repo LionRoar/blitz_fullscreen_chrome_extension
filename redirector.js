@@ -36,15 +36,9 @@ var currTab;
 // does some very basic manipulation of the url in the input box
 function get_location() {
     var url = document.getElementById('launch_url').value;
-    if (url.substring(0,2) == 'g?' || url.substring(0,1) == '?') {
-        url = url.substring(url.substring(0,2) == 'g?' ? 2 : 1);
-        url = "http://www.google.com/search?q=" + url.replace(' ', '+');
-    } else if (url.substring(0,2) == 'd?') {
-        url = "http://www.duckduckgo.com/?q=" + url.replace('d?','').replace(' ', '+');
-    } else if (url.substring(0,4) != "http") {
-        url = "http://" + url;
-    }
-    return url;
+    if(url.substring(0,8) === "https://"|| url.substring(0,7) === "http://")
+        return  url;
+    return "https://www.google.com/search?q=" + url.replace(' ', '+');
 }
 
 // handles hitting 'enter' inside the input box
@@ -52,7 +46,10 @@ function handle_keypress(e) {
     key = e.keyCode? e.keyCode : e.charCode;
     //check if a tab is selected
     if(key == 13 && document.activeElement.tagName == 'LI'){
-        document.activeElement.click();
+        let mouseEvent = new MouseEvent('click');
+        if(e.ctrlKey)
+            mouseEvent = new MouseEvent('click',{ctrlKey: true});
+        document.activeElement.dispatchEvent(mouseEvent);
     }
     else if(key==13 && !e.shiftKey) {
         chrome.windows.getCurrent(function(w) {
@@ -146,10 +143,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // put the current url in there and select it
     chrome.windows.getCurrent(function(w) {
         chrome.tabs.getSelected(w.id, function (tab) {
-            currTab = tab.id;
-            input_field.value = tab.url;
             input_field.focus();
             input_field.select();
+            document.execCommand("paste")
+            if(input_field.value==='')
+                input_field.value = tab.url;
+                currTab = tab.id;
         });
         
         do_list_tabs(w);

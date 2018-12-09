@@ -4,7 +4,8 @@
     "description": "A fullscreen URL launcher",
     "homepage_url": "http://www.blitzlogger.com/blitz-chrome-url-extension.html",
     "permissions": [
-        "tabs", "http://*/*", "https://*/*"
+        "tabs", "http://*/*", "https://*/*",
+        "clipboardRead"
     ],
     "icons" : {
         "16": "icon16.png",
